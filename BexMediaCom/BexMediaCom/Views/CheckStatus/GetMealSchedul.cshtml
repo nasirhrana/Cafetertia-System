@@ -1,0 +1,111 @@
+﻿@model IEnumerable<BexMediaCom.Models.Division>
+
+@{
+    ViewBag.Title = "GetMealSchedul";
+    Layout = "~/Views/Shared/_LayoutCafe.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.jqueryui.min.css" />
+<link href="~/Content/plugins/StyleSheet1.css" rel="stylesheet" />
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Check Meal Schedul
+            <small>Check Meal Schedul</small>
+        </h1>
+    </section>
+    <!-----------------------------------------------------------------------------------Common &  Menu Section------------------------------------------------------------------------------->
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Data Table-------------------------------------------------------------------------------------------------------------------------------------------- -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box-size">
+                    <div class="box-header">
+                        <h3 class="box-title">Check Meal Schedul</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="myTable" class="table table-bordered table-striped" style="text-align: center">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center"> SL.</th>
+                                    <th style="text-align: center"> Date</th>
+                                    <th style="text-align: center"> Item</th>
+                                    <th style="text-align: center"> Quantity</th>
+                                    <th style="text-align: center"> status</th>
+                                    <th style="text-align: center">Operation</th>
+                                </tr>
+                            </thead>
+                            <tbody id="departmentWishReport"></tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                @{
+                    string message = "";
+                    string message2 = "";
+                    string body = "";
+                    if (TempData["TimeLeft"] != null)
+                    {
+                        message = TempData.Peek("TimeLeft").ToString();
+                        body = @"Only " + " " + message + " " + "hour left and you can cancel request miniman 24 hour before.";
+                    }
+
+
+                }
+                <h4 style="text-align: center; color: red"> @body </h4>
+            </div>
+        </div>
+    </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/plugins/InputMask/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/JavaScript/JavaScript8.js"></script>
+    <script src="~/JavaScript/JavaScript9.js"></script>
+    <script src="~/JavaScript/JavaScript10.js"></script>
+    <script src="~/JavaScript/JavaScript11.js"></script>
+    <script src="~/JavaScript/JavaScript12.js"></script>
+    <script src="~/JavaScript/JavaScript1.js"></script>
+    <script src="~/JavaScript/JavaScript2.js"></script>
+    <script src="~/JavaScript/JavaScript3.js"></script>
+    <script src="~/JavaScript/JavaScript4.js"></script>
+    <script src="~/JavaScript/JavaScript5.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $.ajax({
+                url: '@Url.Action("GetAllMealSchedul", "CheckStatus")',
+                dataType: 'json',
+                method: 'post',
+                success: function (data) {
+                    $('#myTable').dataTable({
+                        data: data,
+                        columns: [
+                           { 'data': 'Number' },
+                           { 'data': 'Date' },
+                           { 'data': 'Item' },
+                           { 'data': 'Quantity' },
+                           { 'data': 'Status' },
+                           {
+                                "targets": [4],
+                                "data": "Id",
+                                "render": function (data, type, full) { return '@Html.ActionLink("Cancel", "CancelMeal", new { id = "replace" }, new { onclick = "return confirm('Are you sure you wish to Cancel?');" })'.replace("replace", data); }
+                           }
+                        ]
+                    });
+                }
+            });
+        });
+
+    </script>
+}
+

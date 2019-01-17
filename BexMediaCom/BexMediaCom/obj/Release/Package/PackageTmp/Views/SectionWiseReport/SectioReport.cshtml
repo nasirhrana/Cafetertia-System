@@ -1,0 +1,762 @@
+﻿
+@{
+    ViewBag.Title = "SectioReport";
+    Layout = "~/Views/Shared/_LayoutCafe.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.jqueryui.min.css" />
+<link href="~/Content/plugins/StyleSheet1.css" rel="stylesheet" />
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Section Wise Report
+            <small>Section Wise Report</small>
+        </h1>
+    </section>
+    <!-----------------------------------------------------------------------------------Common &  Menu Section------------------------------------------------------------------------------->
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- right column -->
+            <div class="col-md-12">
+                <div class="box-size box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Section Wise Report</h3>
+                    </div>
+
+                    <form class="form-horizontal" method="POST" id="myForm">
+                        <div class="box-body">
+                            <div class="col-md-9">
+                                <div class="row">
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label for="TypeId" class="control-label">Type</label>
+                                                <select class="form-control select2" id="TypeId" name="TypeId" style="width: 100%;">
+                                                    <option disabled selected>Select One</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label for="DivisionId" class="control-label">Division</label>
+                                                <select class="form-control select2" id="DivisionId" name="DivisionId" style="width: 100%;">
+                                                    <option disabled selected>Select One</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label for="DepartmentId" class="control-label">Department</label>
+                                                <select class="form-control select2" id="DepartmentId" name="DepartmentId" style="width: 100%;">
+                                                    <option disabled selected>Select One</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group" id="Name12">
+                                            <div class="col-md-12">
+                                                @*<label for="Name" class="control-label">Criteria</label>*@
+                                                <label for="Name" class="control-label">Employee </label>
+                                                <input type="text" id="Name" name="Name" class="form-control" />
+                                            </div>
+                                        </div> 
+
+                                        <div class="form-group" id="Name123" hidden="Name123">
+                                            <label for="Name" class="col-sm-2 control-label">Section</label>
+                                            <div class="col-sm-12">
+                                                <select class="form-control select2" id="Name1" name="Name" style="width: 100%;">
+                                                    <option value="0">Select One</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <label for="Name" class="control-label">Date</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                    <input type="text" name="daterange" class="form-control pull-right" id="reservation">
+                                                </div>
+                                                <!-- /.input group -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    @*<label for="Name" class="col-sm-2 control-label">Item</label>*@
+                                    <div class="col-sm-7">
+                                        <input type="checkbox" id="Breakfast" name="Breakfast" value="8"> Breakfast<br>
+                                        <input type="checkbox" id="Lunch" name="Lunch" value="6"> Lunch<br>
+                                        <input type="checkbox" id="Dinner" name="Dinner" value="7"> Dinner
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <input type="checkbox" id="Sehuri" name="Sehuri" value="9"> Sehuri <br />
+                                        <input type="checkbox" id="All" name="All" value="999999"> All
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" class="btn btn-default" onclick="funClear();">Cancel</button>
+                        <button type="button" id="Report" class="btn btn-info pull-right">Generate</button>
+                    </div><!-- /.box-footer -->
+                </div><!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div><!-- /.row -->
+        <!-- Data Table-------------------------------------------------------------------------------------------------------------------------------------------- -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box-size">
+                    <div class="box-header">
+                        <h3 class="box-title">Department Daily Transaction</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="myTable" class="table table-bordered table-striped" style="text-align: center">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">SL.</th>
+                                    <th style="text-align: center">Date</th>
+                                    <th style="text-align: center">Item</th>
+                                    <th style="text-align: center">Avg. Unit Price</th>
+                                    <th style="text-align: center">Quantity</th>
+                                    <th style="text-align: center">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemWishReport"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan='1'> <span style="text-align: center; color: black" id='totalSalary1'>  </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary2'>   </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary3'> </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary4'>  </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary5'>  </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary6'>  </span> </td>
+
+                                </tr>
+
+                            </tfoot>
+                        </table>
+                         
+                        <table id="myTable2" class="table table-bordered table-striped" style="text-align: center">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">SL.</th>
+                                    <th style="text-align: center">PIN</th>
+                                    <th style="text-align: center">Name</th>
+                                    <th style="text-align: center">Designation</th>
+                                    <th style="text-align: center">Section Name</th>
+                                    <th style="text-align: center">Avg. Unit Price</th>
+                                    <th style="text-align: center">Quantity</th>
+                                    @*<th style="text-align: center">Sub Total</th>*@
+                                    <th style="text-align: center">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemWishReport2"></tbody>
+                            <tfoot>
+                                <tr>
+
+                                    <td colspan='1'> <span style="text-align: center; color: black" id='totalSalary198'>  </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary2'>   </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary3'> </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary4'>  </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary5'>  </span> </td>
+
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary6'>  </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary7'>  </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary8'>  </span> </td>
+
+                                    @*<td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary9'>  </span> </td>*@
+
+                                </tr>
+
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/plugins/InputMask/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/JavaScript/JavaScript8.js"></script>
+    <script src="~/JavaScript/JavaScript9.js"></script>
+    <script src="~/JavaScript/JavaScript10.js"></script>
+    <script src="~/JavaScript/JavaScript11.js"></script>
+    <script src="~/JavaScript/JavaScript12.js"></script>
+    <script src="~/JavaScript/JavaScript1.js"></script>
+    <script src="~/JavaScript/JavaScript2.js"></script>
+    <script src="~/JavaScript/JavaScript3.js"></script>
+    <script src="~/JavaScript/JavaScript4.js"></script>
+    <script src="~/JavaScript/JavaScript5.js"></script>
+    <script>
+    $(document).ready(function () {
+        getDivision();
+        GetItem();
+        GetEmployeeType();
+
+        $('#myTable').hide();
+        $('#myTable2').hide();
+
+        $(function () {
+            $('input[name="daterange"]').daterangepicker({
+                opens: 'left'
+            }, function (start, end, label) {
+                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            });
+        });
+        $("#Report").click(function () {
+            $('#myTable').DataTable().destroy();
+            $('#myTable2').DataTable().destroy();
+            var type = $("#TypeId").val();
+            var departmentId = $("#DepartmentId").val();
+            var breakfast = $("#Breakfast").is(':checked') ? 8 : 0;
+            var lunch = $("#Lunch").is(':checked') ? 6 : 0;
+            var dinner = $("#Dinner").is(':checked') ? 7 : 0;
+            var sehuri = $("#Sehuri").is(':checked') ? 9 : 0;
+            var all = $("#All").is(':checked') ? "All" : 0;
+            var name = 0;
+            if (type == 1) {
+                name = $("#Name").val();
+            } else {
+                name = $("#Name1").val();
+            }
+
+            var date = $("#reservation").val();
+            var index = date.indexOf('-');
+            var startdate = date.substring(0, index);
+            var enddate = date.substring(index + 1);
+            if (type == 1) {
+                $('#myTable').DataTable().destroy();
+                $('#myTable2').DataTable().destroy();
+                $('#myTable').show();
+                $('#myTable2').hide();
+                $.ajax({
+                    url: '@Url.Action("GetReport", "SectionWiseReport")',
+                    dataType: 'json',
+                    method: 'post',
+                    data: { type: type, startdate: startdate, enddate: enddate, departmentId: departmentId, name: name, breakfast: breakfast, lunch: lunch, dinner: dinner, sehuri: sehuri, all: all },
+                    success: function (data) {
+                        if (data.length != 0) {
+                            $('#myTable').dataTable({
+                                destroy: true,
+                                dom: 'Bfrtip',
+                                "footerCallback": function (tfoot, data, start, end, display) {
+                                    var api = this.api();
+                                    var p = api.column(3).data().reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+
+                                    var p1 = api.column(4).data().reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+
+                                    var total = api.column(5).data().reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+
+                                    $('#totalSalary1').html("Total");
+                                    $('#totalSalary5').html(p1);
+                                    $('#totalSalary6').html(total.toFixed(2));
+                                },
+                                buttons: [
+                            {
+                                extend: 'excel',
+                                title: 'Individual Employee' + 's' + ' Section Wise Cafeteria Bill',
+                                @*messageTop: 'Form : ' + startdate + 'To : ' + enddate + '  <br/>' + 'Employee Name : ' + data[0].Name + '  <br/>' + 'PIN No. : ' + data[0].EmpId + '  <br/>' + 'Designation : ' + data[0].Designation + '  <br/>' + 'Division : ' + data[0].Division + '  <br/>' + 'Department : ' + data[0].Department,
+                                messageBottom: '@DateTime.Now',*@
+                                footer: true
+                            },
+
+                            {
+                                extend: 'pdfHtml5',
+                                title: 'Export',
+                                header: true,
+                                messageTop: 'Employee Name : ' + data[0].Name + '  \n' + 'PIN No. : ' + data[0].EmpId + '  \n' + 'Designation : ' + data[0].Designation + ' \n' + 'Division : ' + data[0].Division + ' \n' + 'Department : ' + data[0].Department + ' \n' + 'Section : ' + data[0].SectionName,
+                                messageBottom: '@DateTime.Now',
+                                footer: true,
+                                customize: function (doc) {
+                                    doc.content[2].margin = [100, 5, 100, 20],
+                                    doc.content.splice(0, 1, {
+                                        text: [
+                                            {
+                                                text: 'Individual Employee' + 's' + ' Section Wise Cafeteria Bill \n',
+                                                bold: true,
+                                                fontSize: 16
+                                            },
+                                        {
+                                            text: 'Form : ' + startdate + 'To : ' + enddate +' \n',
+                                            bold: true,
+                                            fontSize: 11
+                                        }
+
+                                        ],
+                                        margin: [0, 0, 0, 12],
+                                        alignment: 'center',
+
+                                    });
+                                }
+                            },
+
+                            {
+                                extend: 'print',
+                                title: 'Individual Employee' + 's' + ' Section Wise Cafeteria Bill' + '<br/>' + 'Form : ' + startdate + 'To : ' + enddate,
+                                messageTop: 'Employee Name : ' + data[0].Name + '  <br/>' + 'PIN No. : ' + data[0].EmpId + '  <br/>' + 'Designation : ' + data[0].Designation + '  <br/>' + 'Division : ' + data[0].Division + '  <br/>' + 'Department : ' + data[0].Department + '  <br/>' + 'Section : ' + data[0].SectionName,
+                                messageBottom: '@DateTime.Now',
+                                footer: true,
+                                header: true,
+                                customize: function ( win ) {
+                                    $(win.document.body).find('h1').css('text-align', 'center');
+                                    $(win.document.body).find('h1').css('font-size', '17px');
+                                    $(win.document.body).find('td').css('text-align', 'center');
+                                    $(win.document.body).find('th').css('text-align', 'center');
+                                    $(win.document.body).css( 'font-size', '12px' );
+                                    $(win.document.body).find( 'table' )
+                                    .addClass( 'compact' )
+                                    .css( 'font-size', 'inherit' );
+                                }
+                            },
+
+                             {
+                                 extend: 'print',
+                                 text: 'Preview',
+                                 title: 'Individual Employee' + 's' + ' Section Wise Cafeteria Bill' + '<br/>' + 'Form : ' + startdate + 'To : ' + enddate,
+                                 messageTop: 'Employee Name : ' + data[0].Name + '  <br/>' + 'PIN No. : ' + data[0].EmpId + '  <br/>' + 'Designation : ' + data[0].Designation + '  <br/>' + 'Division : ' + data[0].Division + '  <br/>' + 'Department : ' + data[0].Department + '  <br/>' + 'Section : ' + data[0].SectionName,
+                                 messageBottom: '@DateTime.Now',
+                                 footer: true,
+                                 header: true,
+                                 autoPrint: false,
+                                 customize: function (win) {
+                                     $(win.document.body).find('h1').css('text-align', 'center');
+                                     $(win.document.body).find('h1').css('font-size', '17px');
+                                     $(win.document.body).find('td').css('text-align', 'center');
+                                     $(win.document.body).find('th').css('text-align', 'center');
+                                     $(win.document.body).css('font-size', '12px');
+                                     $(win.document.body).find('table')
+                                     .addClass('compact')
+                                     .css('font-size', 'inherit');
+                                 }
+                             }
+                                ],
+                                data: data,
+                                columns: [
+                               { 'data': 'SerialNo' },
+                               { 'data': 'CheckDate' },
+                               { 'data': 'FoodItem' },
+                               { 'data': 'ItemCost' },
+                               { 'data': 'ItemQty' },
+                               { 'data': 'Total' }
+
+                                ],
+
+                                order: [1, 'asc'],
+                                //rowGroup: {
+                                //    dataSrc: 'EmployeeName'
+                                //}
+                            });
+                        } else {
+                            $('#myTable').DataTable().clear().destroy();
+                            var table = $('#myTable').DataTable({
+                                "footerCallback": function (tfoot, data, start, end, display) {
+                                    var api = this.api();
+
+
+                                    //$('#totalSalary4').html("Total : " + p);
+                                   // $('#totalSalary111').html("Total");
+                                    $('#totalSalary5').html(0);
+                                    $('#totalSalary6').html(0.00);
+                                },
+                            });
+                            table.clean();
+                        }
+                    }
+                });
+
+            } else {
+                $('#myTable2').show();
+                $('#myTable').hide();
+                $.ajax({
+                    url: '@Url.Action("GetReport", "SectionWiseReport")',
+                    dataType: 'json',
+                    method: 'post',
+                    data: { type: type, startdate: startdate, enddate: enddate, departmentId: departmentId, name: name, breakfast: breakfast, lunch: lunch, dinner: dinner, sehuri: sehuri, all: all },
+                    success: function (data) {
+                        if (data.length != 0) {
+                            $('#myTable2').dataTable({
+                                destroy: true,
+                                dom: 'Bfrtip',
+                                "footerCallback": function (tfoot, data, start, end, display) {
+                                    var api = this.api();
+                                    var p = api.column(6).data().reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+
+                                    var p1 = api.column(7).data().reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+
+                                    //var total = api.column(9).data().reduce(function (a, b) {
+                                    //    return a + b;
+                                    //}, 0);
+                                    $('#totalSalary198').html("Total");
+                                    $('#totalSalary7').html(p);
+                                    $('#totalSalary8').html(p1.toFixed(2));
+                                    //$('#totalSalary9').html("Total : " + total);
+                                },
+                                buttons: [
+                            {
+                                extend: 'excel',
+                                title: 'Department' + 's' + ' Item Wise Total Cafeteria Bill',
+                                @*messageTop: 'Form : ' + startdate + 'To : ' + enddate + '  <br/>' + 'Employee Name : ' + data[0].Name + '  <br/>' + 'PIN No. : ' + data[0].EmpId + '  <br/>' + 'Designation : ' + data[0].Designation + '  <br/>' + 'Division : ' + data[0].Division + '  <br/>' + 'Department : ' + data[0].Department,
+                                messageBottom: '@DateTime.Now',*@
+                                footer: true
+                            },
+
+                            {
+                                extend: 'pdfHtml5',
+                                title: 'Department' + 's' + ' Item Wise Total Cafeteria Bill',
+                                header: true,
+                                messageTop: 'Division : ' + data[0].Division + ' \n' + 'Department : ' + data[0].Department + ' \n' + 'Section : ' + data[0].SectionName,
+                                messageBottom: '@DateTime.Now',
+                                footer: true,
+                                customize: function (doc) {
+                                    doc.content[2].margin = [8, 5, 0, 20],
+                                    doc.content.splice(0, 1, {
+                                        text: [
+                                            {
+                                                text: 'Department' + 's' + ' Item Wise Total Cafeteria Bill \n',
+                                                bold: true,
+                                                fontSize: 16
+                                            },
+                                        {
+                                            text: 'Form : ' + startdate + 'To : ' + enddate +' \n',
+                                            bold: true,
+                                            fontSize: 11
+                                        }
+
+                                        ],
+                                        margin: [0, 0, 0, 12],
+                                        alignment: 'center',
+
+                                    });
+                                }
+                            },
+
+                            {
+                                extend: 'print',
+                                title: 'Department' + 's' + ' Item Wise Total Cafeteria Bill' + '<br/>' + 'Form : ' + startdate + 'To : ' + enddate,
+                                messageTop: 'Division : ' + data[0].Division + '  <br/>' + 'Department : ' + data[0].Department + '  <br/>' + 'Section : ' + data[0].SectionName,
+                                messageBottom: '@DateTime.Now',
+                                footer: true,
+                                header: true,
+                                customize: function ( win ) {
+                                    $(win.document.body).find('h1').css('text-align', 'center');
+                                    $(win.document.body).find('h1').css('font-size', '17px');
+                                    $(win.document.body).find('td').css('text-align', 'center');
+                                    $(win.document.body).find('th').css('text-align', 'center');
+                                    $(win.document.body).css( 'font-size', '12px' );
+                                    $(win.document.body).find( 'table' )
+                                    .addClass( 'compact' )
+                                    .css( 'font-size', 'inherit' );
+                                }
+                            },
+
+                             {
+                                 extend: 'print',
+                                 text: 'Preview',
+                                 title: 'Department' + 's' + ' Item Wise Total Cafeteria Bill' + '<br/>' + 'Form : ' + startdate + 'To : ' + enddate,
+                                 messageTop: 'Division : ' + data[0].Division + '  <br/>' + 'Department : ' + data[0].Department + '  <br/>' + 'Section : ' + data[0].SectionName,
+                                 messageBottom: '@DateTime.Now',
+                                 footer: true,
+                                 header: true,
+                                 autoPrint: false,
+                                 customize: function (win) {
+                                     $(win.document.body).find('h1').css('text-align', 'center');
+                                     $(win.document.body).find('h1').css('font-size', '17px');
+                                     $(win.document.body).find('td').css('text-align', 'center');
+                                     $(win.document.body).find('th').css('text-align', 'center');
+                                     $(win.document.body).css('font-size', '12px');
+                                     $(win.document.body).find('table')
+                                     .addClass('compact')
+                                     .css('font-size', 'inherit');
+                                 }
+                             }
+                                ],
+                                data: data,
+                                columns: [
+                               { 'data': 'SerialNo' },
+                               { 'data': 'EmpId' },
+                               { 'data': 'Name' },
+                               { 'data': 'Designation' },
+                               //{ 'data': 'Department' },
+                               { 'data': 'SectionName' },
+                               { 'data': 'ItemCost' },
+                               { 'data': 'ItemQty' },
+                               //{ 'data': 'SubTotal' },
+                               { 'data': 'Total' }
+
+                                ],
+
+                                order: [1, 'asc'],
+                                //rowGroup: {
+                                //    dataSrc: 'EmployeeName'
+                                //}
+                            });
+                        } else {
+                            $('#myTable2').DataTable().clear().destroy();
+                            var table = $('#myTable2').DataTable({
+                                "footerCallback": function (tfoot, data, start, end, display) {
+                                    var api = this.api();
+
+
+                                    //$('#totalSalary4').html("Total : " + p);
+                                    // $('#totalSalary111').html("Total");
+                                    $('#totalSalary7').html(0);
+                                    $('#totalSalary8').html(0.00);
+                                },
+                            });
+                            table.clean();
+                        }
+                    }
+                });
+            }
+        });
+        @*$.ajax({
+                    url: '@Url.Action("GetReport", "SectionWiseReport")',
+                    dataType: 'json',
+                    method: 'post',
+                    data: { type: type, startdate: startdate, enddate: enddate, departmentId: departmentId, name: name, breakfast: breakfast, lunch: lunch, dinner: dinner, sehuri: sehuri, all: all },
+                    success: function(data) {
+                        $('#myTable').dataTable({
+                            destroy: true,
+                            dom: 'Bfrtip',
+                            buttons: [
+                                'excel', 'pdf', {
+                                    extend: 'print',
+                                    text: 'Priview',
+                                    title: function() {
+                                        var printTitle = 'Section Wise Report';
+                                        return printTitle;
+                                    },
+                                    autoPrint: false
+                                }, {
+                                    extend: 'print',
+                                    title: function() {
+                            var printTitle = 'Section Wise Report';
+                            return printTitle;
+                        },
+                                }
+                            ],
+                            data: data,
+                            columns: [
+                                { 'data': 'SectionName' },
+                                { 'data': 'FoodItem' },
+                                { 'data': 'ItemCost' },
+                                { 'data': 'ItemQty' }
+                            ]
+                        });
+                    }
+                });
+
+            });*@
+
+        $("#TypeId").click(function () {
+            var typeId = $("#TypeId").val();
+            if (typeId == 1) {
+                $("#Name").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: '@Url.Action("AutoSearch", "ViewItemWiseReport")',
+                            dataType: "json",
+                            data: { search: $("#Name").val(), type: $("#TypeId").val() },
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return { label: item.Name + "---" + item.Section + "---" + item.EmailId + "---" + item.EmpId, value: item.Date };
+                                }));
+                            },
+                            error: function (xhr, status, error) {
+                                alert("Error");
+                            }
+                        });
+                    }
+                });
+            } else {
+                $("#Name").autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: '@Url.Action("AutoSearchSectionByDepartmentId", "SectionWiseReport")',
+                            dataType: "json",
+                            data: { type: $("#TypeId").val(), search: $("#Name").val(), departmentId: $("#DepartmentId").val() },
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return { label: item.Name, value: item.Name };
+                                }));
+                            },
+                            error: function (xhr, status, error) {
+                                alert("Error");
+                            }
+                        });
+                    }
+                });
+            }
+
+        });
+
+        $("#DivisionId").change(function () {
+            $('#DepartmentId').find('option')
+                .remove()
+                .end()
+                .append('<option disabled selected>Select One</option>');
+            var divisionId = $("#DivisionId").val();
+            var json = { divisionId: divisionId, };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetAllDepartmentByDivisionId", "Employee")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(json),
+                success: function (data) {
+                    $.each(data, function (index, value) {
+                        $('#DepartmentId').append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                    });
+                }
+            });
+
+        });
+        $("#DepartmentId").change(function () {
+            $('#Name1').find('option')
+                    .remove()
+                    .end()
+                    .append('<option disabled selected>Select One</option>');
+            var departmentId = $("#DepartmentId").val();
+            var json = { departmentId: departmentId, };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetAllSection", "Employee")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(json),
+                success: function (data) {
+                    $.each(data, function (index, value) {
+                        $('#Name1').append('<option value="' + value.Id + '">' + value.SectionName + '</option>');
+                    });
+                }
+            });
+
+        });
+
+       // $("#Name12").hide();
+        $("#Name123").hide();
+        $("#TypeId").change(function () {
+            var type = $("#TypeId").val();
+
+            if (type == 1) {
+                $("#Name123").hide();
+                $("#Name12").show();
+            } else {
+                $("#Name12").hide();
+                $("#Name123").show();
+            }
+
+
+        });
+    });
+
+    function GetItem() {
+        $('#ItemId').find('option')
+            .remove()
+            .end()
+            .append('<option disabled selected>Select One</option>');
+        $.ajax({
+            url: '@Url.Action("GetItem", "ViewItemWiseReport")',
+            type: "POST",
+            success: function (result) {
+                $.each(result, function (index, value) {
+                    $('#ItemId').append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                });
+            },
+            error: function (err) {
+                alert(err);
+            }
+        });
+    }
+
+    function GetEmployeeType() {
+        $('#EmployeeTypeId').find('option')
+            .remove()
+            .end()
+            .append('<option disabled selected>Select One</option>');
+        $.ajax({
+            url: '@Url.Action("GetAllType", "ViewItemWiseReport")',
+            type: "POST",
+            success: function (result) {
+                $.each(result, function (index, value) {
+                    $('#TypeId').append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                });
+            },
+            error: function (err) {
+                alert(err);
+            }
+        });
+    }
+
+    function getDivision() {
+        //$('#DivisionId').find('option')
+        //    .remove()
+        //    .end()
+        //    .append('<option disabled selected>Select One</option>');
+        $.ajax({
+            url: "../Employee/GetAllDivision",
+            type: "POST",
+            success: function (result) {
+
+                $.each(result, function (index, value) {
+                    $('#DivisionId').append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                });
+            },
+            error: function (err) {
+                alert(err);
+            }
+        });
+    }
+
+    </script>
+}
+
+
+
+

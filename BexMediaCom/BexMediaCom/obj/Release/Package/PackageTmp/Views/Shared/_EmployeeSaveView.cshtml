@@ -1,0 +1,743 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BEXIMCO | Dashboard</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/datepicker")
+    @Styles.Render("~/Content/sweetalert")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/plugins/daterangepicker/moment.min.js"></script>
+
+    <style>
+        #status {
+            font-size: 11px;
+            margin: 10px;
+        }
+
+        .availablecss {
+            background-color: #CEFFCE;
+            border: 1px solid green;
+        }
+
+        .notavailablecss {
+            background-color: #FFD9D9;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="@Url.Action("Index", "Home")" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>B</b>EX</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>BEXIMCO</b></span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- Messages: style can be found in dropdown.less-->
+                        <!-- Notifications: style can be found in dropdown.less -->
+                        <!-- Tasks: style can be found in dropdown.less -->
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/UploadFile/@Session["image"]" class="img-circle" alt="User Image" style="height: 25px; width: 25px; border-radius: 50%">
+                                <span class="hidden-xs">@Session["Name"]</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="~/UploadFile/@Session["image"]" class="img-circle" alt="User Image">
+                                    <p>
+                                        @Session["UserRole"]
+                                    </p>
+                                </li>
+                                <!-- Menu Body -->
+                                <!-- Menu Body End -->
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="/Login/Logout" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                        <li>
+                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar --------------------------------------------------------------------------------->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="~/UploadFile/@Session["image"]" class="img-circle" alt="User Image" style="height: 40px; width: 40px; border-radius: 50%">
+                    </div>
+                    <div class="pull-left info">
+                        <p>@Session["Name"]</p>
+                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    </div>
+                </div>
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="header">MAIN NAVIGATION</li>
+                    <li class="active">
+                        <a href="@Url.Action("Index", "Home")">
+                            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                        </a>
+                    </li>
+
+                    @{
+                        string userName = (string)Session["UserRole"];
+                    }
+                    @if (userName == "Admin")
+                    {
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-th"></i>
+                                <span>Application Settings</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="@Url.Action("Save", "Division")"><i class="fa fa-circle-o"></i> Division</a></li>
+                                <li><a href="@Url.Action("Save", "Department")"><i class="fa fa-circle-o"></i> Department</a></li>
+                                <li><a href="@Url.Action("Save", "Designation")"><i class="fa fa-circle-o"></i>Designation</a></li>
+                                <li><a href="@Url.Action("AddSection", "Section")"><i class="fa fa-circle-o"></i>Section</a></li>
+                                <li><a href="@Url.Action("Save", "Employee")"><i class="fa fa-circle-o"></i>Employee</a></li>
+
+                            </ul>
+                        </li>
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-cutlery"></i>
+                                <span>Cafeteria</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-th"></i>
+                                        <span>Item</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="@Url.Action("Save", "FoodItemCost")"><i class="fa fa-circle-o"></i> Add Food Item</a></li>
+                                        <li><a href="@Url.Action("Save", "FoodTimeFrame")"><i class="fa fa-circle-o"></i> Time Frame </a></li>
+                                    </ul>
+                                </li>
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-th"></i>
+                                        <span>Transaction</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="@Url.Action("Save", "EmployeeCafeteriaTransaction")"><i class="fa fa-circle-o"></i> Employee Transaction</a></li>
+                                        <li><a href="@Url.Action("Save", "DepartmentCafeteriaTransaction")"><i class="fa fa-circle-o"></i> Department Transaction</a></li>
+                                    </ul>
+                                </li>
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-th"></i>
+                                        <span>Cost Calculation</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="@Url.Action("SaveBazar", "DailyBazar")"><i class="fa fa-circle-o"></i>Bazar</a></li>
+                                        <li><a href="@Url.Action("AddUnitRate", "DailyBazar")"><i class="fa fa-circle-o"></i>Update Rate</a></li>
+                                    </ul>
+                                </li>
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-th"></i>
+                                        <span>Report</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="@Url.Action("TransactionView", "ViewEmployeeTransaction")"><i class="fa fa-circle-o"></i> Employee Report</a></li>
+                                        <li><a href="@Url.Action("DeptTransactionView", "ViewDepartmentTransaction")"><i class="fa fa-circle-o"></i> Department Report</a></li>
+                                        <li><a href="@Url.Action("ItemWiseReport", "ViewItemWiseReport")"><i class="fa fa-circle-o"></i> Item Wise Report </a></li>
+                                        <li><a href="@Url.Action("SectioReport", "SectionWiseReport")"><i class="fa fa-circle-o"></i> Section Wise Report</a></li>
+                                        <li><a href="@Url.Action("GetDivisionReport", "DivisionWiseReport")"><i class="fa fa-circle-o"></i> Division Wise Report</a></li>
+
+                                    </ul>
+                                </li>
+
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-th"></i>
+                                        <span>Service Requisition</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="@Url.Action("SendOrder", "SendOrderAndCheckNeed")"><i class="fa fa-circle-o"></i> Send Requisition </a></li>
+                                        <li><a href="@Url.Action("CheckNeed", "SendOrderAndCheckNeed")"><i class="fa fa-circle-o"></i> Confirm Requisition </a></li>
+                                    </ul>
+                                </li>
+
+
+
+
+                                <li><a href="@Url.Action("Test", "Test")"><i class="fa fa-circle-o"></i> Employee Monitoring </a></li>
+
+                                <li><a href="@Url.Action("ReadFile", "TextFile")"><i class="fa fa-circle-o"></i> Export Text File </a></li>
+
+                                <li><a href="@Url.Action("TodaysNeed", "SendOrderAndCheckNeed")"><i class="fa fa-circle-o"></i> Today's Need </a></li>
+
+
+                            </ul>
+                        </li>
+                    }
+                    @if (userName == "CafeAdmin")
+                    {
+
+                        @*<li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-th"></i>
+                                    <span>Application Settings</span>
+                                    <span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="@Url.Action("Save", "Division")"><i class="fa fa-circle-o"></i> Division</a></li>
+                                    <li><a href="@Url.Action("Save", "Department")"><i class="fa fa-circle-o"></i> Department</a></li>
+                                    <li><a href="@Url.Action("Save", "Designation")"><i class="fa fa-circle-o"></i>Designation</a></li>
+                                    <li><a href="@Url.Action("AddSection", "Section")"><i class="fa fa-circle-o"></i>Section</a></li>
+                                    <li><a href="@Url.Action("Save", "Employee")"><i class="fa fa-circle-o"></i>Employee</a></li>
+
+                                </ul>
+                            </li>*@
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-cutlery"></i>
+                                <span>Cafeteria</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                @*<li class="treeview">
+                                        <a href="#">
+                                            <i class="fa fa-th"></i>
+                                            <span>Item</span>
+                                            <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+                                        <ul class="treeview-menu">
+                                            <li><a href="@Url.Action("Save", "FoodItemCost")"><i class="fa fa-circle-o"></i> Add Food Beverage & Cost</a></li>
+                                            <li><a href="@Url.Action("Save", "FoodTimeFrame")"><i class="fa fa-circle-o"></i> Time Frame </a></li>
+                                        </ul>
+                                    </li>*@
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-th"></i>
+                                        <span>Transaction</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="@Url.Action("Save", "EmployeeCafeteriaTransaction")"><i class="fa fa-circle-o"></i> Employee Transaction</a></li>
+                                        <li><a href="@Url.Action("Save", "DepartmentCafeteriaTransaction")"><i class="fa fa-circle-o"></i> Department Transaction</a></li>
+                                    </ul>
+                                </li>
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-th"></i>
+                                        <span>Cost Calculation</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="@Url.Action("SaveBazar", "DailyBazar")"><i class="fa fa-circle-o"></i>Bazar</a></li>
+                                        <li><a href="@Url.Action("AddUnitRate", "DailyBazar")"><i class="fa fa-circle-o"></i>Update Rate</a></li>
+                                    </ul>
+                                </li>
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-th"></i>
+                                        <span>Report</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="@Url.Action("TransactionView", "ViewEmployeeTransaction")"><i class="fa fa-circle-o"></i> Employee Wise Report</a></li>
+                                        <li><a href="@Url.Action("DeptTransactionView", "ViewDepartmentTransaction")"><i class="fa fa-circle-o"></i> Department Report</a></li>
+                                        <li><a href="@Url.Action("ItemWiseReport", "ViewItemWiseReport")"><i class="fa fa-circle-o"></i> Item Wise Report </a></li>
+                                        <li><a href="@Url.Action("SectioReport", "SectionWiseReport")"><i class="fa fa-circle-o"></i> Section Wise Report</a></li>
+                                        <li><a href="@Url.Action("GetDivisionReport", "DivisionWiseReport")"><i class="fa fa-circle-o"></i> Division Wise Report</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-th"></i>
+                                        <span>Service Requisition</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="@Url.Action("SendOrder", "SendOrderAndCheckNeed")"><i class="fa fa-circle-o"></i> Send Requisition </a></li>
+                                        <li><a href="@Url.Action("CheckNeed", "SendOrderAndCheckNeed")"><i class="fa fa-circle-o"></i> Confirm Requisition </a></li>
+                                    </ul>
+                                </li>
+
+
+
+
+                                <li><a href="@Url.Action("Test", "Test")"><i class="fa fa-circle-o"></i> Transaction Monitoring </a></li>
+
+                                <li><a href="@Url.Action("ReadFile", "TextFile")"><i class="fa fa-circle-o"></i> Export Text File </a></li>
+
+                                <li><a href="@Url.Action("TodaysNeed", "SendOrderAndCheckNeed")"><i class="fa fa-circle-o"></i> Today's Need </a></li>
+
+
+                            </ul>
+                        </li>
+                    }
+                    @if (userName == "CafeAssistant")
+                    {
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-cutlery"></i>
+                                <span>Cafeteria</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                @*<li><a href="@Url.Action("Save", "FoodItemCost")"><i class="fa fa-circle-o"></i> Add Food Beverage & Cost</a></li>
+                                    <li><a href="@Url.Action("Save", "FoodTimeFrame")"><i class="fa fa-circle-o"></i> Time Frame </a></li>
+                                    <li><a href="@Url.Action("Save", "EmployeeCafeteriaTransaction")"><i class="fa fa-circle-o"></i> Employee Transaction</a></li>
+                                    <li><a href="@Url.Action("Save", "DepartmentCafeteriaTransaction")"><i class="fa fa-circle-o"></i> Department Transaction</a></li>
+                                    <li><a href="@Url.Action("TransactionView", "ViewEmployeeTransaction")"><i class="fa fa-circle-o"></i> Employee Transaction Report</a></li>
+                                    <li><a href="@Url.Action("DeptTransactionView", "ViewDepartmentTransaction")"><i class="fa fa-circle-o"></i> Department Transaction Report</a></li>
+                                    <li><a href="@Url.Action("ItemWiseReport", "ViewItemWiseReport")"><i class="fa fa-circle-o"></i> Item Wise Report </a></li>*@
+                                <li><a href="@Url.Action("Test", "Test")"><i class="fa fa-circle-o"></i> Transaction Monitoring </a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (userName == "User")
+                    {
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-cutlery"></i>
+                                <span>Cafeteria</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="@Url.Action("OneEmployeeTransactionView", "ViewEmployeeTransaction")"><i class="fa fa-circle-o"></i> Employee Transaction Report</a></li>
+                                <li><a href="@Url.Action("SendOrder", "SendOrderAndCheckNeed")"><i class="fa fa-circle-o"></i> Service Requisition </a></li>
+                            </ul>
+                        </li>
+                    }
+                    @*<li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-users"></i>
+                                <span>Meeting Room</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="pages/UI/general.html"><i class="fa fa-circle-o"></i> Room Configuration</a></li>
+                                <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i> Room Type</a></li>
+                                <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i> Room Name</a></li>
+                                <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i> Upload Photo</a></li>
+                                <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i> Room Requisition</a></li>
+                                <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Requisition Admin</a></li>
+                                <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Requisition List</a></li>
+                                <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Meeting Report</a></li>
+                            </ul>
+                        </li>*@
+                        @*<li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-user"></i>
+                                    <span>Visitor Management</span>
+                                    <span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="pages/UI/general.html"><i class="fa fa-circle-o"></i> Visitor Type</a></li>
+                                    <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i> New Visitor Entry</a></li>
+                                    <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i> Security</a></li>
+                                    <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i> Visitor Requisition</a></li>
+                                    <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i> Reception</a></li>
+                                    <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Requested List</a></li>
+                                    <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Card Info</a></li>
+                                    <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Card Status</a></li>
+                                    <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Requested List</a></li>
+                                    <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Not Returned List</a></li>
+                                </ul>
+                            </li>*@
+                        @*<li class="treeview">
+                                <a href="#">
+                                    <i class="fa  fa-cart-plus"></i> <span>Point Of Sale</span>
+                                    <span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li><a href="pages/examples/invoice.html"><i class="fa fa-circle-o"></i> Invoice</a></li>
+                                    <li><a href="pages/examples/profile.html"><i class="fa fa-circle-o"></i> Profile</a></li>
+                                    <li><a href="pages/examples/login.html"><i class="fa fa-circle-o"></i> Login</a></li>
+                                    <li><a href="pages/examples/register.html"><i class="fa fa-circle-o"></i> Register</a></li>
+                                    <li><a href="pages/examples/lockscreen.html"><i class="fa fa-circle-o"></i> Lockscreen</a></li>
+                                    <li><a href="pages/examples/404.html"><i class="fa fa-circle-o"></i> 404 Error</a></li>
+                                    <li><a href="pages/examples/500.html"><i class="fa fa-circle-o"></i> 500 Error</a></li>
+                                    <li><a href="pages/examples/blank.html"><i class="fa fa-circle-o"></i> Blank Page</a></li>
+                                    <li><a href="pages/examples/pace.html"><i class="fa fa-circle-o"></i> Pace Page</a></li>
+                                </ul>
+                            </li>*@
+                        @if (userName == "Admin")
+                        {
+                            <li class="treeview">
+                                <a href="#">
+                                    <i class="fa fa-user-secret"></i> <span>Administrative Panel</span>
+                                    <span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                                </a>
+
+                                <ul class="treeview-menu">
+                                    <li><a href="@Url.Action("", "")"><i class="fa fa-circle-o"></i> Role </a></li>
+                                    <li><a href="@Url.Action("RoleAssign", "Login")"><i class="fa fa-circle-o"></i> Role Assign </a></li>
+                                </ul>
+
+                            </li>
+                        }
+                    </ul>
+                </section>
+                <!-- /.sidebar -->
+            </aside>
+
+            @RenderBody()
+            <footer class="main-footer">
+                <div class="pull-right hidden-xs">
+                    <b>Version</b> 2.4.0
+                </div>
+                <strong>Copyright &copy; 2017-2018 <a href="http://mtelbd.com">w3softinfo</a>.</strong> All rights
+                reserved.
+            </footer>
+            <!-- Control Sidebar -->
+            <aside class="control-sidebar control-sidebar-dark">
+                <!-- Create the tabs -->
+                <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                    <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+                    <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <!-- Home tab content -->
+                    <div class="tab-pane" id="control-sidebar-home-tab">
+                        <h3 class="control-sidebar-heading">Recent Activity</h3>
+                        <ul class="control-sidebar-menu">
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+                                    <div class="menu-info">
+                                        <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+                                        <p>Will be 23 on April 24th</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <i class="menu-icon fa fa-user bg-yellow"></i>
+                                    <div class="menu-info">
+                                        <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
+                                        <p>New phone +1(800)555-1234</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+                                    <div class="menu-info">
+                                        <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
+                                        <p>nora@example.com</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <i class="menu-icon fa fa-file-code-o bg-green"></i>
+                                    <div class="menu-info">
+                                        <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
+                                        <p>Execution time 5 seconds</p>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- /.control-sidebar-menu -->
+                        <h3 class="control-sidebar-heading">Tasks Progress</h3>
+                        <ul class="control-sidebar-menu">
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h4 class="control-sidebar-subheading">
+                                        Custom Template Design
+                                        <span class="label label-danger pull-right">70%</span>
+                                    </h4>
+                                    <div class="progress progress-xxs">
+                                        <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h4 class="control-sidebar-subheading">
+                                        Update Resume
+                                        <span class="label label-success pull-right">95%</span>
+                                    </h4>
+                                    <div class="progress progress-xxs">
+                                        <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h4 class="control-sidebar-subheading">
+                                        Laravel Integration
+                                        <span class="label label-warning pull-right">50%</span>
+                                    </h4>
+                                    <div class="progress progress-xxs">
+                                        <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <h4 class="control-sidebar-subheading">
+                                        Back End Framework
+                                        <span class="label label-primary pull-right">68%</span>
+                                    </h4>
+                                    <div class="progress progress-xxs">
+                                        <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- /.control-sidebar-menu -->
+                    </div>
+                    <!-- /.tab-pane -->
+                    <!-- Stats tab content -->
+                    <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+                    <!-- /.tab-pane -->
+                    <!-- Settings tab content -->
+                    <div class="tab-pane" id="control-sidebar-settings-tab">
+                        <form method="post">
+                            <h3 class="control-sidebar-heading">General Settings</h3>
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">
+                                    Report panel usage
+                                    <input type="checkbox" class="pull-right" checked>
+                                </label>
+                                <p>
+                                    Some information about this general settings option
+                                </p>
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">
+                                    Allow mail redirect
+                                    <input type="checkbox" class="pull-right" checked>
+                                </label>
+                                <p>
+                                    Other sets of options are available
+                                </p>
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">
+                                    Expose author name in posts
+                                    <input type="checkbox" class="pull-right" checked>
+                                </label>
+                                <p>
+                                    Allow the user to show his name in blog posts
+                                </p>
+                            </div>
+                            <!-- /.form-group -->
+                            <h3 class="control-sidebar-heading">Chat Settings</h3>
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">
+                                    Show me as online
+                                    <input type="checkbox" class="pull-right" checked>
+                                </label>
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">
+                                    Turn off notifications
+                                    <input type="checkbox" class="pull-right">
+                                </label>
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group">
+                                <label class="control-sidebar-subheading">
+                                    Delete chat history
+                                    <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
+                                </label>
+                            </div>
+                            <!-- /.form-group -->
+                        </form>
+                    </div>
+                    <!-- /.tab-pane -->
+                </div>
+            </aside>
+            <!-- /.control-sidebar -->
+            <!-- Add the sidebar's background. This div must be placed
+            immediately after the control sidebar -->
+            <div class="control-sidebar-bg"></div>
+        </div>
+
+        <!-- ./wrapper -->
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/dataTables")
+        @Scripts.Render("~/bundles/datepicker")
+        @Scripts.Render("~/bundles/sweetalert")
+        @Scripts.Render("~/bundles/jqeryvaladditional")
+        @RenderSection("scripts", required: false)
+
+        <script>
+            $(document).ready(function () {
+
+
+
+
+
+                $('#btn').click(function () {
+                    if ($("#myForm").valid()) {
+                        var empId = $("#EmpId").val();
+                        var status = $("#divStatus");
+                        status.html("Checking....").removeClass();
+                        $.post("/Employee/CheckEmployeeId", { employeeId: empId },
+                            function (data) {
+                                if (data == true) {
+                                    save();
+                                    Clear();
+                                } else {
+                                    status.html(empId + " is exist you can not save again!").addClass("red!important");
+                                }
+                            });
+
+                    }
+                });
+            });
+            function validateFileType() {
+                var fileName = document.getElementById("EmployeePhotograph").value;
+                var idxDot = fileName.lastIndexOf(".") + 1;
+                var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+                if (extFile == "jpg" || extFile == "jpeg") {
+                    //TO DO
+                } else {
+                    swal("Oop's!", "I Only Accept JPG/JPEG File!", "error");
+                    $('#EmployeePhotograph').val('');
+                }
+            }
+            function check() {
+                if ($("#EmpId").valid()) {
+                    var employeeId = $("#EmpId").val();
+                    var status = $("#divStatus");
+                    status.html("Checking....").removeClass();
+                    $.post("/Employee/CheckEmployeeId", { employeeId: employeeId },
+                        function (data) {
+                            if (data == true) {
+                                status.html(employeeId + " is available!").addClass("green!important");
+                            } else {
+                                status.html(employeeId + " is not available!").addClass("red!important");
+                            }
+                        });
+                }
+
+            }
+
+
+
+
+
+
+
+            function save() {
+                debugger;
+                var empId = $("#EmpId").val();
+                var name = $("#Name").val();
+                var email = $("#EmailId").val();
+                var date = $("#JoinDate").val();
+                var divisionId = $("#DivisionId").val();
+                var designationId = $("#DesignationId").val();
+                var cardId = $("#CardId").val();
+                var departmentId = $("#DepartmentId").val();
+                var status = $('input[name=Status]:checked').val();
+                var imageName = $("#EmployeePhotograph").val();
+
+                var params = { EmpId: empId, Name: name, EmailId: email, JoinDate: date, DepartmentId: departmentId, DivisionId: divisionId, DesignationId: designationId, CardId: cardId, Status: status, EmployeePhotograph: imageName };
+
+                $.ajax({
+                    url: "../Employee/Save",
+                    data: params,
+                    type: "POST",
+                    success: function (result) {
+                        swal("Good job!", "Employee Saved Successfully!", "success");
+                        Clear();
+                    },
+                    error: function (err) {
+                        swal("Oops...", "Something went wrong!", "error");
+                    }
+                });
+            }
+
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,218 @@
+﻿@model IEnumerable<BexMediaCom.Models.Employee>
+@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_LayoutCafe.cshtml";
+}
+                      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+                      <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+                      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css" />
+                      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.jqueryui.min.css" />
+<link href="~/Content/plugins/StyleSheet1.css" rel="stylesheet" /> 
+
+
+<div class="content-wrapper">
+                          <!-- Content Header (Page header) -->
+                          <section class="content-header">
+                              <h1>
+                                  Monitoring
+                                  <small>Employee Monitoring</small>
+                              </h1>
+                              <ol class="breadcrumb">
+                                  <div class="form-group">
+                                      <label class="col-sm-3 control-label">Total: </label>
+                                      <div class="col-sm-9">
+                                          <input type="text" readonly="readonly" id="totaluser" style="text-align: center" />
+                                      </div>
+                                  </div>
+                              </ol>
+                          </section>
+                          <!-----------------------------------------------------------------------------------Common &  Menu Section------------------------------------------------------------------------------->
+                          <!-- Main content -->
+                          <section class="content">
+                              <div class="row">
+                                  <!-- right column -->
+                                  <div class="col-sm-offset-3 col-md-6">
+                                      <!-- Horizontal Form -->
+                                      <div class="box box-info box-form">
+                                          <!-- form start -->
+                                          <div class="form-group">
+                                              <label for="FoodItemCostId" class="col-sm-4 control-label" style="text-align: center; padding: 5px">Food Item</label>
+                                              <div class="col-sm-8">
+                                                  <select class="form-control select2" id="FoodItemCostId" name="FoodItemCostId" style="width: 100%;">
+                                                      <option disabled selected>Select One</option>
+                                                  </select>
+                                              </div>
+                                          </div>
+
+                                      </div><!-- /.box -->
+                                  </div><!--/.col (right) -->
+                              </div> <!-- /.row -->       
+
+                              <div class="row">
+                                  <!-- right column -->
+                                  <div class="col-sm-offset-1 col-md-10">
+                                      <div class="box-size box-danger">
+                                          <div class="box-header with-border">
+                                              <input type="submit" value="Start Monitoring" id="Start" class="btn btn-info" />
+                                              <input type="submit" value="Stop Monitoring" id="Stop" class="btn btn-danger pull-right" />
+                                          </div>
+                                          <!-- /.box-body -->
+
+                                      </div><!-- /.box -->
+                                  </div>
+                                  <!-- /.col -->
+                              </div><!-- /.row -->
+                              <!-- Data Table-------------------------------------------------------------------------------------------------------------------------------------------- -->
+                              <div class="row">
+                                  <div class="col-md-12">
+                                      <div class="box">
+                                          <div class="box-header">
+                                              <h3 class="box-title">Employee Monitoring</h3>
+                                          </div>
+                                          <!-- /.box-header -->
+                                          <div class="box-body">
+                                              <table id="myTable" class="table table-striped table-bordered table-hover" style="text-align: center; color: green">
+                                                  <thead>
+                                                      <tr>
+                                                          
+                                                          <th style="text-align: center">Photograph</th> 
+                                                          <th style="text-align: center">Status</th>    
+                                                          <th style="text-align: center">Employee Name</th>
+                                                          <th style="text-align: center">Designation</th> 
+
+                                                                                                                                       
+                                                          <th style="text-align: center">Department</th> 
+                                                          <th style="text-align: center">Division</th>
+                                                        
+                                                      </tr>
+                                                  </thead>
+                                                  <tbody id="StudentTableBody" style="color: black"></tbody>
+                                              </table>
+                                          </div> 
+                                          <!-- /.box-body -->
+                                      </div>
+                                      <!-- /.box -->
+                                  </div>
+                              </div>
+                          </section><!-- /.content -->
+                      </div><!-- /.content-wrapper -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval") 
+                      <script src="~/Content/plugins/InputMask/jquery.inputmask.bundle.min.js"></script>
+                      <script src="~/JavaScript/JavaScript8.js"></script>
+                      <script src="~/JavaScript/JavaScript9.js"></script>
+                      <script src="~/JavaScript/JavaScript10.js"></script>
+                      <script src="~/JavaScript/JavaScript11.js"></script>
+                      <script src="~/JavaScript/JavaScript12.js"></script>
+                      <script src="~/JavaScript/JavaScript1.js"></script>
+                      <script src="~/JavaScript/JavaScript2.js"></script>
+                      <script src="~/JavaScript/JavaScript3.js"></script>
+                      <script src="~/JavaScript/JavaScript4.js"></script>
+                      <script src="~/JavaScript/JavaScript5.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#FoodItemCostId').find('option')
+    .remove()
+    .end()
+    .append('<option disabled selected>Select One</option>');
+            $.ajax({
+                url: "../FoodTimeFrame/GetFoodItemCost",
+                type: "POST",
+                success: function (result) {
+
+                    $.each(result, function (index, value) {
+                        $('#FoodItemCostId').append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                    });
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            });
+
+            $("#myTable").hide();
+            var interval = null;
+            $("#Start").click(function () {
+                var foodItemId1 = $("#FoodItemCostId").val();
+                if (foodItemId1 !=null) {
+                    $("#myTable").show();
+                    $(function () {
+                        interval = setInterval(loadTable, 500); // invoke load every second
+                        loadTable(); // load on initial page loaded
+                    });
+                }
+
+            });
+
+            //$('#stop').click(function () {
+            //    // I want the worker function to stop being triggered here
+            //    $('.test').remove();
+            //});
+
+            $("#Stop").click(function() {
+                $("#myTable").show();
+                $(function() {
+                    clearInterval(interval); // invoke load every second
+              
+                        setTimeout(myFunction, 500);
+                  
+                    function myFunction() {
+                        location.reload();
+                        loadTable();
+                    }
+                    // load on initial page loaded
+                });
+            });
+
+            function loadTable() {
+                $('#tablecontainer').load(myfunction());
+            }
+            //$("td:last").css("background-color", "yellow");
+
+            var countData = null;
+            var countData1 = null;
+            function myfunction() {
+               // $("#StudentTableBody").empty();
+                var start = $("#Start").val();
+                var foodItemId = $("#FoodItemCostId").val();
+                $.ajax({
+                    url: '@Url.Action("Test1", "Test")',
+                    dataType: 'json',
+                    method: 'post',
+                    data: { foodItemId: foodItemId },
+                    success: function (data) {
+                        countData = Object.keys(data).length;
+                        $("#totaluser").val(countData);
+                        if (countData1 != null) {
+                            if (countData > countData1) {
+                                countData1 = countData;
+                                alert(countData);
+                                $.each(data, function (key, value) {
+                                    $("#StudentTableBody").append('<tr><td>' + '<img src="/UploadFile/' + value.UploadFile + '" class="img-responsive" style="height:70px;width:70px; display: block;  margin-left: auto; margin-right: auto;" />' + '</td><td>' + value.Statuss + '</td><td>' + value.Name + '</td><td>' + value.Designation + '</td><td>' + value.Department + '</td><td>' + value.Division + '</td></tr>');
+                                                         
+                                });
+                               
+                            } else {
+                               
+                                return false;
+                               
+                            }
+                        } else {
+                            $("#StudentTableBody").empty();
+                            $.each(data, function (key, value) {
+                                $("#StudentTableBody").append('<tr><td>' + '<img src="/UploadFile/' + value.UploadFile + '" class="img-responsive" style="height:70px;width:70px; display: block;  margin-left: auto; margin-right: auto;" />' + '</td><td>' + value.Statuss + '</td><td>' + value.Name + '</td><td>' + value.Designation + '</td><td>' + value.Department + '</td><td>' + value.Division + '</td></tr>');
+
+                            });
+                           
+                        }
+
+                    }
+                });
+            }
+
+        });
+
+    </script>
+}
+

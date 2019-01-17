@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 2 | Dashboard</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="~/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/bower_components/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="~/bower_components/morris.js/morris.css">
+    <link rel="stylesheet" href="~/bower_components/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="~/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="~/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="~/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> 
+    <style>
+        .container1 {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 50px;
+        }
+
+            .container1 img {
+                width: 100%;
+                height: auto;
+            }
+
+            .container1 .btn1 {
+                /*position: absolute;*/
+                /*top: 50%;
+                left: 50%;*/
+                /*transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);*/
+                background-color: #f1f1f1;
+                color: black;
+                font-size: 16px;
+                padding: 16px 30px;
+                border: none;
+               /*// cursor: pointer;*/
+                /*border-radius: 50px;*/
+                text-align: center;
+            }
+
+                .container1 .btn1:hover {
+                    background-color: lightblue;
+                    color: black;
+                }
+    </style>
+</head>
+<body>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Dashboard
+                    <small>Control panel</small>
+                </h1>
+              
+            </section>
+            <!-- Main content -->
+            <section class="content">
+                <!-- Small boxes (Stat box) -->
+                <section class="content">
+                    <div class="row well">
+                        <div class="col-lg-3 col-xs-3 well">
+                            <!-- small box -->
+                            <div class="small-box bg-aqua">
+                                <div class="inner">
+                                    <h3>@Session["TotalCost"]</h3>
+                                    <p>TOTAL COST</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                                <a href="/ViewEmployeeTransaction/OneEmployeeTransactionView" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-xs-3 well">
+                            <!-- small box -->
+                            <div class="small-box bg-green">
+                                <div class="inner">
+                                    <h3>@Session["TotalMeil"]</h3>
+                                    <p>TOTAL MEAL</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                                <a href="/ViewEmployeeTransaction/OneEmployeeTransactionView" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-xs-3 well">
+                            <!-- small box -->
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3>@Session["AvgUnitRate"]</h3>
+                                    <p>AVG. UNIT RATE</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                                <a href="/ViewEmployeeTransaction/OneEmployeeTransactionView" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        @{
+                            string userName4 = (string)Session["UserRole"];
+                        }
+                        @if (userName4 == "User")
+                        {
+                            <div class="col-lg-3 col-xs-3 well">
+                                <!-- small box -->
+                                <div class="small-box bg-light-blue">
+                                    <div class="inner">
+                                        <h3>@Session["Notification"]</h3>
+                                        <p>Notification</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-android-notifications"></i>
+                                    </div>
+                                    <a href="/CheckStatus/GetStatus" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                        }
+                        @{
+                           string userName5 = (string)Session["UserRole"];
+                        }
+                        @if (userName5 == "Admin" || userName5 == "CafeAdmin")
+                        {
+                            <div class="col-lg-3 col-xs-3 well">
+                                <!-- small box -->
+                                <div class="small-box bg-light-blue">
+                                    <div class="inner">
+                                        <h3>@Session["Notification1"]</h3>
+                                        <p>Notification</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="ion ion-android-notifications"></i>
+                                    </div>
+                                    <a href="/SendOrderAndCheckNeed/CheckNeed" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                        }
+                       
+                    </div>
+
+                    <!-- /.row -->
+                </section>
+                @{
+                    string userName = (string)Session["UserRole"];
+                }
+                @if (userName == "Admin")
+                {
+                    <section class="content">
+                        <div class="row well">
+                            <div class="col-md-2 well">
+                                <div class="info-box">
+
+                                    <div class="container1">
+                                        <img src="/img/10.Jpg" alt="Snow" style="width: 100%">
+                                        <p class="btn1"> Cafeteria </p>
+                                        <div class="small-box bg-red">
+                                            <a href="/Dashboard/Cafetoria" class="small-box-footer"> Details <i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+
+                            <div class="col-md-2 well">
+                                <div class="info-box">
+
+                                    <div class="container1">
+                                        <img src="/img/Inventory.jpg" alt="Snow" style="width: 100%">
+                                        <p class="btn1"> Inventory </p>
+                                        <div class="small-box bg-red">
+                                            <a href="/Dashboard/Inventory" class="small-box-footer"> Details <i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+
+
+                            <div class="col-md-2 well">
+                                <div class="info-box">
+
+                                    <div class="container1">
+                                        <img src="/img/Meeting_Room.jpg" alt="Snow" style="width: 100%">
+                                        <p class="btn1">Meeting </p>
+                                        <div class="small-box bg-red">
+                                            <a href="/Dashboard/Meeting" class="small-box-footer"> Details <i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+
+                            <div class="col-md-2 well">
+                                <div class="info-box">
+
+                                    <div class="container1">
+                                        <img src="/img/10.Jpg" alt="Snow" style="width: 100%">
+                                        <p class="btn1"> Name </p>
+                                        <div class="small-box bg-red">
+                                            <a href="/ViewEmployeeTransaction/OneEmployeeTransactionView" class="small-box-footer">Coming Soon...<i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+
+                            <div class="col-md-2 well">
+                                <div class="info-box">
+
+                                    <div class="container1">
+                                        <img src="/img/10.Jpg" alt="Snow" style="width: 100%">
+                                        <p class="btn1"> Name </p>
+                                        <div class="small-box bg-red">
+                                            <a href="/ViewEmployeeTransaction/OneEmployeeTransactionView" class="small-box-footer">Coming Soon...<i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+
+                            <div class="col-md-2 well">
+                                <div class="info-box">
+
+                                    <div class="container1">
+                                        <img src="/img/10.Jpg" alt="Snow" style="width: 100%">
+                                        <p class="btn1"> Name </p>
+                                        <div class="small-box bg-red">
+                                            <a href="/ViewEmployeeTransaction/OneEmployeeTransactionView" class="small-box-footer">Coming Soon...<i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+
+                        </div>
+                    </section>
+                }
+
+
+
+                <section class="content">
+                    <!-- Main row -->
+                    <div class="row well">
+                        <!-- Left col -->
+                        <section class="col-md-12 col-lg-12 connectedSortable">
+
+                            <div class="box box-primary">
+
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <!-- See dist/js/pages/dashboard.js to activate the todoList plugin -->
+                                    <!-- Calendar -->
+                                    <div class="box box-solid bg-green-gradient">
+                                        <div class="box-header">
+                                            <i class="fa fa-calendar"></i>
+                                            <h3 class="box-title">Calendar</h3>
+                                            <!-- tools box -->
+                                            <div class="pull-right box-tools">
+                                                <!-- button with a dropdown -->
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                        <i class="fa fa-bars"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu pull-right" role="menu">
+                                                        <li><a href="#">Add new event</a></li>
+                                                        <li><a href="#">Clear events</a></li>
+                                                        <li class="divider"></li>
+                                                        <li><a href="#">View calendar</a></li>
+                                                    </ul>
+                                                </div>
+                                                <button type="button" class="btn btn-success btn-sm" data-widget="collapse">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-success btn-sm" data-widget="remove">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <!-- /. tools -->
+                                        </div>
+                                        <!-- /.box-header -->
+                                        <div class="box-body no-padding">
+                                            <!--The calendar -->
+                                            <div id="calendar" style="width: 100%"></div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <!-- /.box -->
+
+                        </section>
+                        <!-- /.Left col -->
+                        <!-- right col -->
+                    </div>
+                    <!-- /.row (main row) -->
+                </section>
+            </section>
+
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+    <!-- jQuery 3 -->
+    <script src="~/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/dist/js/pages/dashboard.js"></script>
+</body>
+</html>

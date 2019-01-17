@@ -1,0 +1,245 @@
+﻿@model BexMediaCom.Models.FoodTimeFrame
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutCafe.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.jqueryui.min.css" />
+<link href="~/Content/plugins/StyleSheet1.css" rel="stylesheet" />
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Food Time Frame
+            <small>Update Food Time Frame</small>
+        </h1>
+    </section>
+    <!-----------------------------------------------------------------------------------Common &  Menu Section------------------------------------------------------------------------------->
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- right column -->
+            <div class="col-sm-offset-1 col-md-10">
+                <div class="box-size box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title" style="color:white">Update Food Time Frame</h3>
+                    </div>
+                    <form class="form-horizontal" method="POST" id="myForm">
+                        @Html.AntiForgeryToken()
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Food Item</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control select2" id="FoodItemCostId" name="FoodItemCostId" style="width:100%;">
+                                        <option disabled selected>Select One</option>
+                                    </select>
+                                </div>
+                            </div><!-- /.form-group -->
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Start Time</label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control", placeholder = "Start Time" } })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">End Time</label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control", placeholder = "End Time" } })
+                                </div>
+                            </div>
+                            <div class="col-sm-2"></div>
+
+                        </div><!-- /.box-body -->
+                        <h3 style="text-align: center; color: white"><label id="displayMsg"></label> </h3>
+                        <div class="box-footer">
+                            <button type="button" class="btn btn-default" onclick="Clear();">Cancel</button>
+                            <button type="submit" class="btn btn-info pull-right">Update</button>
+                        </div><!-- /.box-footer -->
+                    </form>
+                    <!-- /.box-body -->
+
+                </div><!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div><!-- /.row -->
+        <!-- Data Table-------------------------------------------------------------------------------------------------------------------------------------------- -->
+        <div class="row">
+            <div class="col-sm-offset-1 col-md-10">
+                <div class="box-size">
+                    <div class="box-header">
+                        <h3 class="box-title" style="color:white">All Food Time Frame</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="myTable" class="table table-bordered table-striped" style="text-align: center">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">SI</th>
+                                    <th style="text-align: center">Item Name</th>
+                                    <th style="text-align: center">Start Time</th>
+                                    <th style="text-align: center">End Time</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/plugins/InputMask/jquery.inputmask.bundle.min.js"></script>
+<script src="~/JavaScript/JavaScript8.js"></script>
+<script src="~/JavaScript/JavaScript9.js"></script>
+<script src="~/JavaScript/JavaScript10.js"></script>
+<script src="~/JavaScript/JavaScript11.js"></script>
+<script src="~/JavaScript/JavaScript12.js"></script>
+<script src="~/JavaScript/JavaScript1.js"></script>
+<script src="~/JavaScript/JavaScript2.js"></script>
+<script src="~/JavaScript/JavaScript3.js"></script>
+    <script src="~/JavaScript/JavaScript4.js"></script>
+     <script src="~/JavaScript/JavaScript5.js"></script>
+
+<script>
+    $(document).ready(function () {
+        getFoodItem();
+        $("#StartTime").inputmask({ mask: "99:99" });
+        $("#EndTime").inputmask({ mask: "99:99" });
+
+        jQuery.validator.addMethod("time", function(value, element) {
+            return this.optional(element) || /^([01][0-9])|(2[0123]):([0-5])([0-9])$/.test(value);
+        }, "Please enter a valid time, between 00:00 and 23:59");
+
+        $("#myForm").validate({
+            rules: {
+                FoodItemCostId: {
+                    required: true
+                },
+                StartTime: {
+                    required: true,
+                    time: true
+                },
+                EndTime: {
+                    required: true,
+                    time: true
+                }
+
+            },
+            messages: {
+                FoodItemCostId: {
+                    required: "Please Select A Food Item"
+                },
+                StartTime: {
+                    required: "Please Provide A Valid Time"
+                },
+                EndTime: {
+                    required: "Please Provide A Valid Time"
+                }
+
+            }
+        });
+
+        $("#btn").click(function () {
+            var time = $("#StartTime").val();
+            var startTime1 = $("#StartTime").val();
+            var endTime1 = $("#EndTime").val();
+            var foodItemId = $("#FoodItemCostId").val();
+
+            var hour = parseInt(time.substr(0, 2));
+            var minute = parseInt(time.substr(3, 5));
+            var startTime = hour * 60 + minute;
+
+            hour = parseInt(endTime1.substr(0, 2));
+            minute = parseInt(endTime1.substr(3, 5));
+            var endTime = hour * 60 + minute;
+
+            if (startTime == endTime) {
+                $("#displayMsg").text("Its not Possible to create Zero Minute Duration");
+            }
+
+            if (startTime < endTime) {
+
+                var jsonData = { StartTime: startTime1, EndTime: endTime1, FoodItemCostId: foodItemId };
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Save", "FoodTimeFrame")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(jsonData),
+                    dataType: "json",
+                    success: function (data) {
+                      //  alert(data);
+                        $("#displayMsg").text(data);
+                        if (data != null) {
+                            setTimeout(myFunction, 3000);
+                        }
+                        function myFunction() {
+                            location.reload();
+                        }
+                       // location.reload();
+
+
+                    }
+                });
+
+            }
+            if (startTime > endTime) {
+                $("#displayMsg").text("Start time must be less than end time");
+
+            }
+
+
+
+        });
+
+        $.ajax({
+            url: '@Url.Action("JsonViewFoodItemTimeSchedule", "FoodItemCost")',
+            dataType: 'json',
+            method: 'post',
+            success: function(data) {
+                $('#myTable').dataTable({
+                    data: data,
+                    columns: [
+                        { 'data': 'Id' },
+                        { 'data': 'Name' },
+                        { 'data': 'StartTime' },
+                        { 'data': 'EndTime' }
+                    ]
+                });
+            }
+        });
+    });
+
+    function getFoodItem() {
+        $('#FoodItemCostId').find('option')
+            .remove()
+            .end()
+            .append('<option disabled selected>Select One</option>');
+        $.ajax({
+           // url: "../FoodTimeFrame/GetFoodItemCost",
+            url: '@Url.Action("GetFoodItemCost", "FoodTimeFrame")',
+            type: "POST",
+            success: function (result) {
+
+                $.each(result, function (index, value) {
+                    $('#FoodItemCostId').append('<option value="' + value.Id + '">' + value.Name + '</option>');
+                });
+            },
+            error: function (err) {
+                alert(err);
+            }
+        });
+    }
+
+</script>
+}

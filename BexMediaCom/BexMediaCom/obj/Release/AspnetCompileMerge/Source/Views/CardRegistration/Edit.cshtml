@@ -1,0 +1,147 @@
+﻿@model BexMediaCom.Models.CardRegistration
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutCafe.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.jqueryui.min.css" />
+<link href="~/Content/plugins/StyleSheet1.css" rel="stylesheet" />
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Card
+            <small>Card Registration</small>
+        </h1>
+    </section>
+    <!-----------------------------------------------------------------------------------Common &  Menu Section------------------------------------------------------------------------------->
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- right column -->
+            <div class="col-sm-offset-1 col-md-10">
+                <div class="box-size box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Card Registration</h3>
+                    </div><!-- /.box-header -->
+                    <form class="form-horizontal" method="POST" id="myForm">
+                        @Html.AntiForgeryToken()
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="Number" class="col-sm-2 control-label">Card Number</label>
+                                <div class="col-sm-8">
+                                    @Html.EditorFor(model => model.Number, new { htmlAttributes = new { @class = "form-control", placeholder = "Number" } })
+                                </div>
+                            </div>
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-offset-2">
+
+                                @if (ViewBag.Message != null)
+                                {
+                                    <div class="col-sm-offset-2 callout callout-success">
+                                        <label type="text" id="Message">@ViewBag.Message</label>
+                                    </div>
+                                }
+                            </div>
+                        </div><!-- /.box-body -->
+                        <div class="box-footer">
+                            <button type="button" class="btn btn-danger" onclick="funClear();">Cancel</button>
+                            <input type="submit" value="Update" class="btn btn-info pull-right" />
+                        </div><!-- /.box-footer -->
+                    </form>
+                    <!-- /.box-body -->
+
+                </div><!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div><!-- /.row -->
+        <!-- Data Table-------------------------------------------------------------------------------------------------------------------------------------------- -->
+        <div class="row">
+            <div class="col-sm-offset-1 col-md-10">
+                <div class="box-size">
+                    <div class="box-header">
+                        <h3 class="box-title">All Card Number</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="myTable" class="table table-bordered table-striped" style="text-align: center">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">SI</th>
+                                    <th style="text-align: center">Card Number</th>
+                                    <th style="text-align: center">Status</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/plugins/InputMask/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/JavaScript/JavaScript8.js"></script>
+    <script src="~/JavaScript/JavaScript9.js"></script>
+    <script src="~/JavaScript/JavaScript10.js"></script>
+    <script src="~/JavaScript/JavaScript11.js"></script>
+    <script src="~/JavaScript/JavaScript12.js"></script>
+    <script src="~/JavaScript/JavaScript1.js"></script>
+    <script src="~/JavaScript/JavaScript2.js"></script>
+    <script src="~/JavaScript/JavaScript3.js"></script>
+    <script src="~/JavaScript/JavaScript4.js"></script>
+    <script src="~/JavaScript/JavaScript5.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#myForm").validate({
+                rules: {
+                    Number: {
+                        required: true,
+                        number: true,
+                        minlength: 8,
+                        maxlength: 8
+                    }
+                },
+                messages: {
+                    Number: {
+                        required: "Please provide 8 digit number excluding 0 ",
+                        number: "Pelase put only Number.",
+                        minlength: "Number must be 8 characters.",
+                        maxlength: "Number not more then 8 characters."
+                    }
+                }
+            });
+            $.ajax({
+                url: '@Url.Action("JsonViewCardReg", "CardRegistration")',
+                dataType: 'json',
+                method: 'post',
+                success: function(data) {
+                    $('#myTable').dataTable({
+                        data: data,
+                        columns: [
+                            { 'data': 'SNumber' },
+                            { 'data': 'Number' },
+                            { 'data': 'Status' }
+                        ]
+                    });
+                }
+            });
+        });
+
+        function funClear() {
+            $("#Number").val('');
+        };
+    </script>
+
+}

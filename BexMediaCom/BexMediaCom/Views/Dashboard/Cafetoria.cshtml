@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewBag.Title = "Cafetoria";
+    Layout = "~/Views/Shared/_LayoutCafe.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.jqueryui.min.css" />
+<link href="~/Content/plugins/StyleSheet1.css" rel="stylesheet" />
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Cafeteria
+            <small>Cafeteria</small>
+        </h1>
+    </section>
+    <!-----------------------------------------------------------------------------------Common &  Menu Section------------------------------------------------------------------------------->
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Data Table-------------------------------------------------------------------------------------------------------------------------------------------- -->
+        <div class="row well">
+            <div class="col-md-4"></div> 
+            <div class="col-md-6 well">
+                
+                <li class="treeview">
+              
+                        <i class="fa fa-cutlery"></i>
+                        <span>Cafeteria</span>
+                   
+                 
+                    <ul class="treeview-menu">
+                        <li class="treeview">
+                      
+                                <i class="fa fa-th"></i>
+                                <span>Item</span>
+                            
+                           
+                            <ul class="">
+                                <li><a href="@Url.Action("Save", "FoodItemCost")"><i class="fa fa-circle-o"></i> Add Food Beverage & Cost</a></li>
+                                <li><a href="@Url.Action("Save", "FoodTimeFrame")"><i class="fa fa-circle-o"></i> Time Frame </a></li>
+                            </ul>
+                        </li>
+                        <li class="treeview">
+                        
+                                <i class="fa fa-th"></i>
+                                <span>Transation</span>
+                        
+                            <ul class="">
+                                <li><a href="@Url.Action("Save", "EmployeeCafeteriaTransaction")"><i class="fa fa-circle-o"></i> Employee Transaction</a></li>
+                                <li><a href="@Url.Action("Save", "DepartmentCafeteriaTransaction")"><i class="fa fa-circle-o"></i> Department Transaction</a></li>
+                            </ul>
+                        </li>
+                        <li class="treeview">
+                      
+                                <i class="fa fa-th"></i>
+                                <span>Cost Calculation</span>
+                        
+                            <ul class="">
+                                <li><a href="@Url.Action("SaveBazar", "DailyBazar")"><i class="fa fa-circle-o"></i>Bazar</a></li>
+                                <li><a href="@Url.Action("AddUnitRate", "DailyBazar")"><i class="fa fa-circle-o"></i>Update Rate</a></li>
+                            </ul>
+                        </li>
+                        <li class="treeview">
+                      
+                                <i class="fa fa-th"></i>
+                                <span>Report</span>
+
+                            <ul class="">
+                                <li><a href="@Url.Action("TransactionView", "ViewEmployeeTransaction")"><i class="fa fa-circle-o"></i> Employee Wise Report</a></li>
+                                <li><a href="@Url.Action("DeptTransactionView", "ViewDepartmentTransaction")"><i class="fa fa-circle-o"></i> Department Report</a></li>
+                                <li><a href="@Url.Action("ItemWiseReport", "ViewItemWiseReport")"><i class="fa fa-circle-o"></i> Item Wise Report </a></li>
+                                <li><a href="@Url.Action("SectioReport", "SectionWiseReport")"><i class="fa fa-circle-o"></i> Section Wise Report</a></li>
+                                <li><a href="@Url.Action("GetDivisionReport", "DivisionWiseReport")"><i class="fa fa-circle-o"></i> Division Wise Report</a></li>
+
+                            </ul>
+                        </li>
+
+                        <li class="treeview">
+                         
+                                <i class="fa fa-th"></i>
+                                <span>Request</span>
+
+                            <ul class="">
+                                <li><a href="@Url.Action("SendOrder", "SendOrderAndCheckNeed")"><i class="fa fa-circle-o"></i> Service Requisition </a></li>
+                                <li><a href="@Url.Action("CheckNeed", "SendOrderAndCheckNeed")"><i class="fa fa-circle-o"></i> Confirm Or Reject Order </a></li>
+                            </ul>
+                        </li>
+
+
+                        <li class="treeview">
+
+                            <i class="fa fa-th"></i>
+                            <span>Other's</span>
+
+                            <ul class="">
+                                <li><a href="@Url.Action("Test", "Test")"><i class="fa fa-circle-o"></i> Employee Monitoring </a></li>
+
+                                <li><a href="@Url.Action("ReadFile", "TextFile")"><i class="fa fa-circle-o"></i> Export Text File </a></li>
+
+                                <li><a href="@Url.Action("TodaysNeed", "SendOrderAndCheckNeed")"><i class="fa fa-circle-o"></i> Today's Need </a></li>
+                            </ul>
+                        </li>
+
+
+
+
+                    </ul>
+                </li> 
+            
+
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </section><!-- /.content -->
+</div><!-- /.content-wrapper --> 
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+ 
+
+}
+

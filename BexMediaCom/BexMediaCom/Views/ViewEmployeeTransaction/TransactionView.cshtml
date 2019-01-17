@@ -1,0 +1,475 @@
+﻿
+@{
+    ViewBag.Title = "TransactionView";
+    Layout = "~/Views/Shared/_LayoutCafe.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.jqueryui.min.css" />
+<link href="~/Content/plugins/StyleSheet1.css" rel="stylesheet" />
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Employee Transaction Report
+            <small>Employee Transaction Report</small>
+        </h1>
+    </section>
+    <!-----------------------------------------------------------------------------------Common &  Menu Section------------------------------------------------------------------------------->
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- right column -->
+            <div class="col-md-12">
+                <div class="box-size box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Employee Transaction Report</h3>
+                    </div>
+                    <form class="form-horizontal" method="POST" id="myForm">
+                        <div class="box-body">
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <!-- Date range -->
+                                    <div class="form-group">
+                                     
+                                        <div class="col-sm-11">
+                                            <label for="Name" class="control-label">Employee</label>
+                                            <input type="text" class="form-control" id="Name" name="Name" placeholder="Employee Name">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                    <!-- /.form group -->
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <!-- Date range -->
+                                    <div class="form-group">
+                                      
+                                        <div class="col-sm-11">
+                                            <label for="Name" class="control-label">Date</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" name="daterange" class="form-control pull-right" id="reservation">
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+                                    </div>
+                                    <!-- /.form group -->
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <!-- Date range -->
+                                    <div class="form-group">
+                                        <label for="Name" class="col-sm-2 control-label">Item</label>
+                                        <div class="col-sm-5">
+                                            <input type="checkbox" id="Breakfast" name="Breakfast" value="8"> Breakfast<br>
+                                            <input type="checkbox" id="Lunch" name="Lunch" value="6"> Lunch<br>
+                                            <input type="checkbox" id="Dinner" name="Dinner" value="7"> Dinner                                         
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <input type="checkbox" id="Sehuri" name="Sehuri" value="9"> Sehri <br/>
+                                            <input type="checkbox" id="All" name="All" value="999999"> All
+                                        </div>
+                                    </div>
+                                    <!-- /.form group -->
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" class="btn btn-default" onclick="funClear();">Cancel</button>
+                        <button type="submit" id="Generate" class="btn btn-info pull-right">Generate</button>
+                    </div><!-- /.box-footer -->
+                </div>
+                <!-- /.box -->
+                </div>
+                <!-- /.col -->
+        </div><!-- /.row -->
+        <!-- Data Table-------------------------------------------------------------------------------------------------------------------------------------------- -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box-size">
+                    <div class="box-header">
+                        <h3 class="box-title">Employee Daily Transaction</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="myTable" class="table table-bordered table-striped" style="text-align: center">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center"> SL.</th>
+                                    <th style="text-align: center"> Date</th>
+                                    <th style="text-align: center"> Item</th>
+                                    <th style="text-align: center"> Unit Price ( BDT )</th>
+                                    <th style="text-align: center">Quentity</th>
+                                    <th style="text-align: center">Total</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="employeeWishReport"></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan='1'> <span style="text-align: center; color: black" id='totalSalary1'>  </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary2'>   </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary3'> </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary4'>  </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary5'>  </span> </td>
+                                    <td colspan='1'> <span style="text-align: center; color: black; " id='totalSalary6'>  </span> </td>
+                                </tr>
+
+                            </tfoot>
+                          <h3 style=" color: red"> </h3>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/plugins/InputMask/jquery.inputmask.bundle.min.js"></script> 
+<script src="~/JavaScript/JavaScript8.js"></script>
+<script src="~/JavaScript/JavaScript9.js"></script>
+<script src="~/JavaScript/JavaScript10.js"></script>
+<script src="~/JavaScript/JavaScript11.js"></script>
+<script src="~/JavaScript/JavaScript12.js"></script>
+<script src="~/JavaScript/JavaScript1.js"></script>
+<script src="~/JavaScript/JavaScript2.js"></script>
+<script src="~/JavaScript/JavaScript3.js"></script>
+<script src="~/JavaScript/JavaScript4.js"></script>
+<script src="~/JavaScript/JavaScript5.js"></script>
+<script src="~/JavaScript/JavaScript6.js"></script>
+    <script>
+    $(document).ready(function () {
+
+        $("#Generate").click(function () {
+            $('#myTable').DataTable().destroy();
+            var name = $("#Name").val();
+            var date = $("#reservation").val();
+            var breakfast = $("#Breakfast").is(':checked') ? 8 : 0;
+            var lunch = $("#Lunch").is(':checked') ? 6 : 0;
+            var dinner = $("#Dinner").is(':checked') ? 7 : 0;
+            var sehuri = $("#Sehuri").is(':checked') ? 9 : 0;
+            var all = $("#All").is(':checked') ? "All" : 0;
+            var index = date.indexOf('-');
+            var startdate = date.substring(0, index);
+            var enddate = date.substring(index + 1);
+
+            $.ajax({
+                url: '@Url.Action("JsonViewEmployeeTransaction", "ViewEmployeeTransaction")',
+                dataType: 'json',
+                method: 'post',
+                data: { name: name, startdate: startdate, enddate: enddate, breakfast: breakfast, lunch: lunch, dinner: dinner, sehuri: sehuri, all: all },
+                success: function (data) {
+                    if (data.length != 0) {
+                        if (name == "All Employee") {
+                            $('#myTable').dataTable({
+                                destroy: true,
+                                dom: 'Bfrtip',
+                                "footerCallback": function (tfoot, data, start, end, display) {
+                                    var api = this.api();
+                                    var p = api.column(4).data().reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+
+
+
+                                    var total = api.column(5).data().reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+                                    $('#totalSalary1').html("Total");
+                                    $('#totalSalary5').html(p);
+                                    $('#totalSalary6').html(total.toFixed(2));
+                                },
+                                buttons: [
+                                {
+                                    extend: 'excel',
+                                    title: 'Individual Employee' + 's' + ' Item Wise Cafeteria Bill',
+                               
+                                    footer: true
+                                },                  
+
+                                {
+                                    extend: 'pdfHtml5',
+                                    title: 'Export',
+                                    header: true,
+                                 
+                                    messageBottom: '@DateTime.Now',
+                                    //footer: true,
+                                    customize: function (doc) {
+                                        doc.content[2].margin = [50, 5, 20, 20],
+
+                                        doc.content.splice(0, 1, {
+                                            text: [
+                                                {
+                                                    text: 'Individual Employee' + 's' + ' Item Wise Cafeteria Bill \n',
+                                                    bold: true,
+                                                    fontSize: 16
+                                                },
+                                            {
+                                                text: 'Form : ' + startdate + 'To : ' + enddate +' \n',
+                                                bold: true,
+                                                fontSize: 11
+                                            }
+
+                                            ],
+                                            margin: [0, 0, 0, 12],
+                                            alignment: 'center',
+                                            orientation: 'landscape',
+                                            pageSize: 'LEGAL'
+                                    
+
+                                        });
+                                    },
+                                    footer: true
+                                },
+                   
+                                { 
+                                    extend: 'print',
+                                    title: 'All Employee' + 's' + ' Item Wise Cafeteria Bill' + '<br/>' + 'Form : ' + startdate + 'To : ' + enddate,
+                                  
+                                    messageBottom: '@DateTime.Now',
+                                    footer: true,
+                                    header: true,
+                                    customize: function ( win ) {
+                                        $(win.document.body).find('h1').css('text-align', 'center');
+                                        $(win.document.body).find('h1').css('font-size', '17px');
+                                        $(win.document.body).find('td').css('text-align', 'center');
+                                        $(win.document.body).find('th').css('text-align', 'center');
+                                        $(win.document.body).css( 'font-size', '12px' );
+                                        $(win.document.body).find( 'table' )
+                                        .addClass( 'compact' )
+                                        .css( 'font-size', 'inherit' );
+                                    }
+                                },
+
+                                 {
+                                     extend: 'print',
+                                     text: 'Preview',
+                                     title: 'All Employee' + 's' + ' Item Wise Cafeteria Bill' + '<br/>' + 'Form : ' + startdate + 'To : ' + enddate,
+                                   messageBottom: '@DateTime.Now',
+                                     footer: true,
+                                     header: true,
+                                     autoPrint: false,
+                                     customize: function (win) {
+                                         $(win.document.body).find('h1').css('text-align', 'center');
+                                         $(win.document.body).find('h1').css('font-size', '17px');
+
+                                         $(win.document.body).find('td').css('text-align', 'center');
+                                         $(win.document.body).find('th').css('text-align', 'center');
+                                         //$(win.document.body).find('footer').css('align-content', 'center');
+
+                                         $(win.document.body).css('font-size', '12px');
+                                         $(win.document.body).find('table')
+                                         .addClass('compact')
+                                         .css('font-size', 'inherit');
+                                     }
+                                 }
+                                ],
+
+                                data: data,
+                                columns: [
+                                     { 'data': 'SerialNo' },
+                                    { 'data': 'CheckDate' },
+                                    { 'data': 'FoodItem' },
+                                    { 'data': 'ItemCost' },
+                                    { 'data': 'ItemQty' },
+                                    { 'data': 'Total' }
+
+                                ],
+
+                                order: [1, 'asc'],
+                                //rowGroup: {
+                                //    dataSrc: 'EmployeeName'
+                                //}
+
+                            });
+                        } else {
+                            $('#myTable').dataTable({
+                                destroy: true,
+                                dom: 'Bfrtip',
+                                "footerCallback": function (tfoot, data, start, end, display) {
+                                    var api = this.api();
+                                    var p = api.column(4).data().reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+
+
+
+                                    var total = api.column(5).data().reduce(function (a, b) {
+                                        return a + b;
+                                    }, 0);
+                                    $('#totalSalary1').html("Total");
+                                    $('#totalSalary5').html(p);
+                                    $('#totalSalary6').html(total.toFixed(2));
+                                },
+                                buttons: [
+                                {
+                                    extend: 'excel',
+                                    title: 'Individual Employee' + 's' + ' Item Wise Cafeteria Bill',
+                                    @*messageTop: 'Form : ' + startdate + 'To : ' + enddate + '  <br/>' + 'Employee Name : ' + data[0].Name + '  <br/>' + 'PIN No. : ' + data[0].EmpId + '  <br/>' + 'Designation : ' + data[0].Designation + '  <br/>' + 'Division : ' + data[0].Division + '  <br/>' + 'Department : ' + data[0].Department,
+                                    messageBottom: '@DateTime.Now',*@
+                                    footer: true
+                                },                  
+
+                                {
+                                    extend: 'pdfHtml5',
+                                    title: 'Export',
+                                    header: true,
+                                    messageTop: 'Employee Name : ' + data[0].Name + '  \n' + 'PIN No. : ' + data[0].EmpId + '  \n' + 'Designation : ' + data[0].Designation + ' \n' + 'Division : ' + data[0].Division + ' \n' + 'Department : ' + data[0].Department,
+                                    messageBottom: '@DateTime.Now',
+                                    //footer: true,
+                                    customize: function (doc) {
+                                        doc.content[2].margin = [50, 5, 20, 20],
+
+                                        doc.content.splice(0, 1, {
+                                            text: [
+                                                {
+                                                    text: 'Individual Employee' + 's' + ' Item Wise Cafeteria Bill \n',
+                                                    bold: true,
+                                                    fontSize: 16
+                                                },
+                                            {
+                                                text: 'Form : ' + startdate + 'To : ' + enddate +' \n',
+                                                bold: true,
+                                                fontSize: 11
+                                            }
+
+                                            ],
+                                            margin: [0, 0, 0, 12],
+                                            alignment: 'center',
+                                            orientation: 'landscape',
+                                            pageSize: 'LEGAL'
+                                    
+
+                                        });
+                                    },
+                                    footer: true
+                                },
+                   
+                                { 
+                                    extend: 'print',
+                                    title: 'Individual Employee' + 's' + ' Item Wise Cafeteria Bill' + '<br/>' + 'Form : ' + startdate + 'To : ' + enddate,
+                                    messageTop: 'Employee Name : ' + data[0].Name + '  <br/>' + 'PIN No. : ' + data[0].EmpId + '  <br/>' + 'Designation : ' + data[0].Designation + '  <br/>' + 'Division : ' + data[0].Division + '  <br/>' + 'Department : ' + data[0].Department,
+                                    messageBottom: '@DateTime.Now',
+                                    footer: true,
+                                    header: true,
+                                    customize: function ( win ) {
+                                        $(win.document.body).find('h1').css('text-align', 'center');
+                                        $(win.document.body).find('h1').css('font-size', '17px');
+                                        $(win.document.body).find('td').css('text-align', 'center');
+                                        $(win.document.body).find('th').css('text-align', 'center');
+                                        $(win.document.body).css( 'font-size', '12px' );
+                                        $(win.document.body).find( 'table' )
+                                        .addClass( 'compact' )
+                                        .css( 'font-size', 'inherit' );
+                                    }
+                                },
+
+                                 {
+                                     extend: 'print',
+                                     text: 'Preview',
+                                     title: 'Individual Employee' + 's' + ' Item Wise Cafeteria Bill' + '<br/>' + 'Form : ' + startdate + 'To : ' + enddate,
+                                     messageTop: 'Employee Name : ' + data[0].Name + '  <br/>' + 'PIN No. : ' + data[0].EmpId + '  <br/>' + 'Designation : ' + data[0].Designation + '  <br/>' + 'Division : ' + data[0].Division + '  <br/>' + 'Department : ' + data[0].Department,
+                                     messageBottom: '@DateTime.Now',
+                                     footer: true,
+                                     header: true,
+                                     autoPrint: false,
+                                     customize: function (win) {
+                                         $(win.document.body).find('h1').css('text-align', 'center');
+                                         $(win.document.body).find('h1').css('font-size', '17px');
+
+                                         $(win.document.body).find('td').css('text-align', 'center');
+                                         $(win.document.body).find('th').css('text-align', 'center');
+                                         //$(win.document.body).find('footer').css('align-content', 'center');
+
+                                         $(win.document.body).css('font-size', '12px');
+                                         $(win.document.body).find('table')
+                                         .addClass('compact')
+                                         .css('font-size', 'inherit');
+                                     }
+                                 }
+                                ],
+
+                                data: data,
+                                columns: [
+                                     { 'data': 'SerialNo' },
+                                    { 'data': 'CheckDate' },
+                                    { 'data': 'FoodItem' },
+                                    { 'data': 'ItemCost' },
+                                    { 'data': 'ItemQty' },
+                                    { 'data': 'Total' }
+
+                                ],
+
+                                order: [1, 'asc'],
+                                //rowGroup: {
+                                //    dataSrc: 'EmployeeName'
+                                //}
+
+                            });
+                        }
+                    } else {
+                        $('#myTable').DataTable().clear().destroy();
+                        var table = $('#myTable').DataTable({
+                            "footerCallback": function (tfoot, data, start, end, display) {
+                                var api = this.api();
+
+
+                                //$('#totalSalary4').html("Total : " + p);
+                                $('#totalSalary1').html("Total");
+                                $('#totalSalary5').html(0);
+                                $('#totalSalary6').html(0.00);
+                            },
+                        });
+                        table.clean();
+                    }
+
+           
+                }
+            });
+
+        });
+
+        $(function () {
+            $('input[name="daterange"]').daterangepicker({
+                opens: 'left'
+            }, function (start, end, label) {
+                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            });
+        });
+
+        $("#Name").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("AutoSearch", "ViewEmployeeTransaction")',
+                    dataType: "json",
+                    data: { search: $("#Name").val() },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Name + "---" + item.Proximity + "---" + item.DivisionName + "---" + item.EmailId + "---" + item.DesignationName, value: item.EmpId };
+                        }));
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error");
+                    }
+                });
+            }
+        });
+
+    });
+    </script>
+}

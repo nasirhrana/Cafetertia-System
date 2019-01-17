@@ -1,0 +1,220 @@
+﻿
+    @{
+        ViewBag.Title = "CheckNeed";
+        Layout = "~/Views/Shared/_LayoutCafe.cshtml";
+    }
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.jqueryui.min.css" />
+    <link href="~/Content/plugins/StyleSheet1.css" rel="stylesheet" />
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Confirm or Reject Order
+                <small> Confirm or Reject Order</small>
+            </h1>
+            <ol class="breadcrumb">
+                <div class="form-group">
+                    <input type="button" class="btn btn-info" id="Employee" value="Employee"/>
+                    <input type="button" class="btn btn-info" id="Department" value="Department" />
+                </div>
+            </ol>
+        </section>
+        <!-----------------------------------------------------------------------------------Common &  Menu Section------------------------------------------------------------------------------->
+        <!-- Main content -->
+        <section class="content">
+            <!-- Data Table-------------------------------------------------------------------------------------------------------------------------------------------- -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="table" class="box-size">
+                        <div class="box-header">
+                            <h3 class="box-title">Employee</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="myTable" class="table table-bordered table-striped" style="text-align: center">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Employee Name</th>
+                                        <th style="text-align: center">Food Item</th> 
+                                        <th style="text-align: center">Menu</th> 
+                                        <th style="text-align: center">Division</th>
+                                        <th style="text-align: center">Depaetment</th>                                     
+                                        <th style="text-align: center">Post</th> 
+                                        <th style="text-align: center">Quantity</th>
+                                        <th style="text-align: center">Confirm</th>
+                                        <th style="text-align: center">Reject</th>
+
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    
+                    
+                    <div id="table1" class="box-size">
+                        <div class="box-header">
+                            <h3 class="box-title">Department</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="myTable1" class="table table-bordered table-striped" style="text-align: center">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center">Division</th>
+                                        <th style="text-align: center">Depaetment</th>
+                                        <th style="text-align: center">Food Item</th> 
+                                        <th style="text-align: center">Menu</th> 
+                                        <th style="text-align: center">Quantity</th>                                                                      
+                                        <th style="text-align: center">Confirm</th>
+                                        <th style="text-align: center">Reject</th>
+                                     
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box --> 
+                    @{
+                        string message = "";
+                        if (TempData["Confirm"] != null)
+                        {
+                             message = TempData.Peek("Confirm").ToString();
+                        }
+                       
+                    }
+                    <h4 style="text-align: center; color: green"> @message </h4>
+               
+                </div>
+            </div>
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        <script src="~/Content/plugins/InputMask/jquery.inputmask.bundle.min.js"></script>
+        <script src="~/JavaScript/JavaScript8.js"></script>
+        <script src="~/JavaScript/JavaScript9.js"></script>
+        <script src="~/JavaScript/JavaScript10.js"></script>
+        <script src="~/JavaScript/JavaScript11.js"></script>
+        <script src="~/JavaScript/JavaScript12.js"></script>
+        <script src="~/JavaScript/JavaScript1.js"></script>
+        <script src="~/JavaScript/JavaScript2.js"></script>
+        <script src="~/JavaScript/JavaScript3.js"></script>
+        <script src="~/JavaScript/JavaScript4.js"></script>
+        <script src="~/JavaScript/JavaScript5.js"></script>
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script src="~/JavaScript/DepartmentSave.js"></script>
+
+        <script>
+            $(document).ready(function () {
+               // $('#table').hide();
+                $('#table1').hide();
+
+                $('#Employee').click(function () {
+                    $('#myTable').DataTable().clear().destroy();
+                    $('#myTable1').DataTable().clear().destroy();
+                    $('#table1').hide();
+                    $('#table').show();
+
+                    $.ajax({
+                        url: '@Url.Action("GetCheckNeedData", "SendOrderAndCheckNeed")',
+                        dataType: 'json',
+                        method: 'post',
+                        success: function (data) {
+                            $('#myTable').dataTable({
+                                data: data,
+                                columns: [
+                                {
+                                    'data': 'Name'
+                                },
+                                {
+                                    'data': 'ItemName'
+                                },
+                                {
+                                    'data': 'CustomMenu'
+                                },
+                                {
+                                    'data': 'Division'
+                                },
+                                {
+                                    'data': 'Department'
+                                },
+                                {
+                                    'data': 'Designation'
+                                },
+                                {
+                                    'data': 'Quantity'
+                                },            
+                                {
+                                    "targets": [4],
+                                    "data": "Id",
+                                    "render": function (data, type, full) { return '@Html.ActionLink("Confirm", "Confirm", new { id = "replace" }, new { onclick = "return confirm('Are you sure you wish to Confirm?');" })'.replace("replace", data); }
+                                },                
+                                {
+                                    "targets": [4],
+                                    "data": "Id",
+                                    "render": function (data, type, full) { return '@Html.ActionLink("Reject", "Reject", new { id = "replace" }, new { onclick = "return confirm('Are you sure you wish to Reject?');" })'.replace("replace", data); }
+                                }
+                                ]
+                            });
+                        }
+                    });
+
+                });
+                $('#Department').click(function () {
+                    $('#myTable').DataTable().clear().destroy();
+                    $('#myTable1').DataTable().clear().destroy();
+                    $('#table').hide();
+                    $('#table1').show();
+                    $.ajax({
+                        url: '@Url.Action("GetDepartmentRequest", "SendOrderAndCheckNeed")',
+                        dataType: 'json',
+                        method: 'post',
+                        success: function (data) {
+                            $('#myTable1').dataTable({
+                                data: data,
+                                columns: [
+                                {
+                                    'data': 'Division'
+                                },
+                                {
+                                    'data': 'Department'
+                                },
+                                {
+                                    'data': 'ItemName'
+                                },
+                                {
+                                    'data': 'CustomMenu'
+                                },
+                                {
+                                    'data': 'Quantity'
+                                },
+                                {
+                                     "targets": [4],
+                                     "data": "Id",
+                                     "render": function (data, type, full) { return '@Html.ActionLink("Confirm", "ConfirmDepartment", new { id = "replace" }, new { onclick = "return confirm('Are you sure you wish to Confirm?');" })'.replace("replace", data); }
+                                },                
+                                {
+                                    "targets": [4],
+                                    "data": "Id",
+                                    "render": function (data, type, full) { return '@Html.ActionLink("Reject", "RejectDepartment", new { id = "replace" }, new { onclick = "return confirm('Are you sure you wish to Reject?');" })'.replace("replace", data); }
+                                }
+                                ]
+                            });
+                        }
+                    });
+
+                });
+
+              
+            });
+
+
+        </script>
+    }
